@@ -1,4 +1,5 @@
 import pygame
+import time
 
 from gameparts import Board
 
@@ -10,8 +11,8 @@ WIDTH = HEIGHT = CELL_SIZE * BOARD_SIZE
 LINE_WIDTH = 15
 BG_COLOR = (28, 170, 156)
 LINE_COLOR = (23, 145, 135)
-X_COLOR = (84, 84, 84)
-O_COLOR = (242, 235, 211)
+X_COLOR = (166, 66, 51)
+O_COLOR = (53, 51, 166)
 X_WIDTH = 15
 O_WIDTH = 15
 SPACE = CELL_SIZE // 4
@@ -80,7 +81,7 @@ def draw_figures(board):
 
 def save_result(result):
     # Если нужно явно указать кодировку, добавьте параметр encoding='utf-8'.
-    with open('results.txt', 'a') as f:
+    with open('results.txt', 'a', encoding='utf-8') as f:
         f.write(result + '\n')
 
 def main():
@@ -107,12 +108,28 @@ def main():
 
                     if game.check_win(current_player):
                         result = f'Победили {current_player}.'
-                        print(result)
+                        def draw_result(result):
+                            # Выывод результата на экран
+                            font = pygame.font.Font(None, 74)
+                            text = font.render(result, True, (255, 255, 255))
+                            text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+                            screen.fill(BG_COLOR)
+                            screen.blit(text, text_rect)
+                            pygame.display.update()
+                        draw_result(result)
                         save_result(result)
                         running = False
                     elif game.is_board_full():
                         result = 'Ничья!'
-                        print(result)
+                        def draw_result(result):
+                            # Выывод результата на экран
+                            font = pygame.font.Font(None, 74)
+                            text = font.render(result, True, (255, 255, 255))
+                            text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+                            screen.fill(BG_COLOR)
+                            screen.blit(text, text_rect)
+                            pygame.display.update()
+                        draw_result(result)
                         save_result(result)
                         running = False
 
@@ -120,8 +137,9 @@ def main():
                     draw_figures(game.board)
 
         pygame.display.update()
-
+    
+    time.sleep(3)
     pygame.quit()
 
 if __name__ == '__main__':
-    main() 
+    main()
